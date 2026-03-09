@@ -75,6 +75,10 @@
         transition: .5s ease;
     }
 
+    .cta a{
+        color: #fff;
+    }
+
     .cta:hover{
         transform:translateY(-5px);
     }
@@ -212,6 +216,14 @@
     outline:none;
     border:1px solid #3b82f6;
     box-shadow:0 0 0 2px rgba(59,130,246,0.3);
+    }
+
+    .login a{
+        color: #fff;
+    }
+
+    .login a:hover{
+        text-decoration: underline;
     }
 
     .error{

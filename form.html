@@ -8,8 +8,11 @@
     <title>Document</title>
 </head>
 <body style="overflow: hidden;">
+    <header>
+        <a href="index.html"><div class="logo">Diartrip</div></a>
+    </header>
     <section style="padding:100px 20px; max-width:600px; margin:auto; position: relative; bottom: 100px;">
-        <h2 class="section-title">Cadastro</h2>
+        <h2 class="section-title" style="margin-bottom:20px;">Cadastro</h2>
         <form id="signupForm" style="display:flex; flex-direction:column; gap:22px; background:rgba(255,255,255,0.05); padding:40px; border-radius:16px; border:1px solid rgba(255,255,255,0.08); backdrop-filter:blur(6px); position:relative;">
 
         <div class="field">
@@ -32,7 +35,7 @@
         </div>
         
         <button class="cta" type="submit">Criar conta</button>
-        <div><a href="login.html">Ja tem uma conta? Clique aqui.</a></div>
+        <div class="login"><a href="login.html">Ja tem uma conta? Clique aqui.</a></div>
         <div id="success" style="display:none; text-align:center; color:#22c55e; font-weight:600;">
         Conta criada com sucesso!
     </div>
