@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body style="overflow: hidden;">
+    <section style="padding:100px 20px; max-width:600px; margin:auto; position: relative; bottom: 70px;">
+        <h2 class="section-title">Login</h2>
+        <form id="signupForm" style="display:flex; flex-direction:column; gap:22px; background:rgba(255,255,255,0.05); padding:40px; border-radius:16px; border:1px solid rgba(255,255,255,0.08); backdrop-filter:blur(6px); position:relative;">
+
+        <div class="field">
+        <label>Nome ou Email</label>
+        <input id="name" type="text" placeholder="Digite seu nome" required>
+        <span class="error" id="nameError"></span>
+        </div>
+
+        <div class="field" style="position:relative">
+        <label>Senha</label>
+        <input id="password" type="password" placeholder="Crie uma senha" required>
+        <span id="togglePassword" style="position:absolute; right:12px; top:38px; cursor:pointer; font-size:14px; color:#94a3b8;">mostrar</span>
+        <span class="error" id="passwordError"></span>
+        </div>
+        
+        <button class="cta" type="submit">Criar conta</button>
+        <div><a href="form.html">Não tem uma conta? Clique aqui.</a></div>
+        <div id="success" style="display:none; text-align:center; color:#22c55e; font-weight:600;">
+        Conta criada com sucesso!
+    </div>
+    </form>
+    
+    <footer>
+    © 2026 Diartrip — Planejamento Inteligente de Viagens
+    </footer>
+
+</body>
+</html>
