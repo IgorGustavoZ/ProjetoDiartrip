@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SmartTrip AI - Dashboard</title>
+<title>Diartrip</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
@@ -188,105 +188,105 @@ grid-template-columns:1fr;
 </head>
 <body>
 
-<div class="app">
+    <div class="app">
 
-<div class="sidebar">
+    <div class="sidebar">
 
-<div class="logo">SmartTrip AI</div>
+    <div class="logo">Diartrip</div>
 
-<div class="menu-item">🏠 Dashboard</div>
-<div class="menu-item">✈ Minhas viagens</div>
-<div class="menu-item">💬 Chat IA</div>
-<div class="menu-item">⚙ Configurações</div>
+    <div class="menu-item">🏠 Dashboard</div>
+    <div class="menu-item">✈ Minhas viagens</div>
+    <div class="menu-item">💬 Chat IA</div>
+    <div class="menu-item">⚙ Configurações</div>
 
-<button class="new-trip">+ Nova viagem</button>
+    <button class="new-trip">+ Nova viagem</button>
 
-</div>
+    </div>
 
-<div class="main">
+    <div class="main">
 
-<div class="header">
-<h2>Minhas viagens</h2>
-<div class="user">Olá, viajante</div>
-</div>
+    <div class="header">
+    <h2>Minhas viagens</h2>
+    <div class="user">Olá, viajante</div>
+    </div>
 
-<div class="content">
+    <div class="content">
 
-<div class="trips">
-<h3>Suas viagens</h3>
+    <div class="trips">
+    <h3>Suas viagens</h3>
 
-<div class="trip-grid">
+    <div class="trip-grid">
 
-<div class="trip-card">
-<strong>Roma</strong>
-<div class="trip-date">12 Jul - 18 Jul</div>
-</div>
+    <div class="trip-card">
+    <strong>Roma</strong>
+    <div class="trip-date">12 Jul - 18 Jul</div>
+    </div>
 
-<div class="trip-card">
-<strong>Paris</strong>
-<div class="trip-date">02 Ago - 10 Ago</div>
-</div>
+    <div class="trip-card">
+    <strong>Paris</strong>
+    <div class="trip-date">02 Ago - 10 Ago</div>
+    </div>
 
-<div class="trip-card">
-<strong>Santiago</strong>
-<div class="trip-date">05 Set - 12 Set</div>
-</div>
+    <div class="trip-card">
+    <strong>Santiago</strong>
+    <div class="trip-date">05 Set - 12 Set</div>
+    </div>
 
-</div>
+    </div>
 
-</div>
+    </div>
 
-<div class="chat">
+    <div class="chat">
 
-<div class="chat-header">Assistente de Viagem IA</div>
+    <div class="chat-header">Assistente de Viagem IA</div>
 
-<div id="chatMessages" class="chat-messages">
-<div class="message"><strong>IA:</strong> Olá! Posso ajudar a planejar sua viagem.</div>
-</div>
+    <div id="chatMessages" class="chat-messages">
+    <div class="message"><strong>IA:</strong> Olá! Posso ajudar a planejar sua viagem.</div>
+    </div>
 
-<div class="chat-input">
-<input id="chatInput" placeholder="Pergunte algo sobre sua viagem...">
-<button onclick="sendMessage()">Enviar</button>
-</div>
+    <div class="chat-input">
+    <input id="chatInput" placeholder="Pergunte algo sobre sua viagem...">
+    <button onclick="sendMessage()">Enviar</button>
+    </div>
 
-</div>
+    </div>
 
-</div>
+    </div>
 
-</div>
+    </div>
 
-</div>
+    </div>
 
 <script>
-function sendMessage(){
+    function sendMessage(){
 
-const input = document.getElementById('chatInput')
-const messages = document.getElementById('chatMessages')
+    const input = document.getElementById('chatInput')
+    const messages = document.getElementById('chatMessages')
 
-const text = input.value.trim()
-if(!text) return
+    const text = input.value.trim()
+    if(!text) return
 
-const userMsg = document.createElement('div')
-userMsg.className = 'message'
-userMsg.innerHTML = '<strong>Você:</strong> ' + text
-messages.appendChild(userMsg)
+    const userMsg = document.createElement('div')
+    userMsg.className = 'message'
+    userMsg.innerHTML = '<strong>Você:</strong> ' + text
+    messages.appendChild(userMsg)
 
-input.value = ''
+    input.value = ''
 
-setTimeout(()=>{
+    setTimeout(()=>{
 
-const aiMsg = document.createElement('div')
-aiMsg.className = 'message'
-aiMsg.innerHTML = '<strong>IA:</strong> Posso sugerir restaurantes, eventos ou clima da viagem.'
+    const aiMsg = document.createElement('div')
+    aiMsg.className = 'message'
+    aiMsg.innerHTML = '<strong>IA:</strong> Posso sugerir restaurantes, eventos ou clima da viagem.'
 
-messages.appendChild(aiMsg)
-messages.scrollTop = messages.scrollHeight
+    messages.appendChild(aiMsg)
+    messages.scrollTop = messages.scrollHeight
 
-},800)
+    },800)
 
-messages.scrollTop = messages.scrollHeight
+    messages.scrollTop = messages.scrollHeight
 
-}
+    }
 </script>
 
 </body>
