@@ -31,9 +31,183 @@
         
     <div class="main">
         <h1>+ Nova viagem</h1>
+        <div class="container" style="display: flex;flex-direction: column;gap: 20px;">
+            <h2>Planejar Viagem ✈️</h2>
 
-   
-        
+            <!-- <div class="field">
+            <label>País de destino</label>
+            <input id="pais" placeholder="Ex: Brasil" required>
+            <div class="sugestoes" id="sugest-pais">
+                 <div class="item-sugest"></div>
+            </div>
+            </div>  -->
+
+            <div class="field">
+            <label>Cidade</label>
+            <input id="cidade" placeholder="Ex: Paris" required readonly>
+            <div class="sugestoes" id="sugest-cidade">
+                
+            </div>
+            </div>
+
+            <div class="field" style="flex:1">
+            <label>Data de início</label>
+            <input id="inicio" type="date" required>
+            </div>
+
+            <div class="field" style="flex:1">
+            <label>Data de fim</label>
+            <input id="fim" type="date" required>
+            </div>
+            
+
+            <div class="field">
+                <label>Orçamento</label>
+                <select id="orcamento">
+                <option value="economico">Econômico</option>
+                <option value="medio">Médio</option>
+                <option value="luxo">Luxo</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Tipo de viagem</label>
+                <select id="tipo">
+                <option value="gastronomico">Gastronômico</option>
+                <option value="aventura">Aventura</option>
+                <option value="cultural">Cultural</option>
+                <option value="relax">Relaxamento</option>
+                </select>
+            </div>
+
+            <div class="field" style="margin-bottom: 36px;">
+                <label>Preferências</label>
+                <input id="preferencias" placeholder="Ex: museus, restaurantes...">
+            </div>
+
+            <button type="submit">Gerar Roteiro</button>
+
+            <div id="result" class="result" style="display: none;">Roteiro sendo gerado...</div>
+
+            </div>       
     </div>
+
+    <script>
+        // var requestOptions = {
+        // method: 'GET',
+        // };
+
+        // fetch("https://api.geoapify.com/v1/geocode/autocomplete?text=Mosco&apiKey=803e071045c64d13a3dbb8c9058c323a", requestOptions)
+        // .then(response => response.json())
+        // .then(result => console.log(result))
+        // .catch(error => console.log('error', error))
+
+        // fetch(`https://api.openweathermap.org/data/2.5/weather?q=Limeira,BR&appid=82c889fafda006a44acac820fd8a2791`)
+        // .then(response => {
+        //     if (!response.ok) {
+        //     throw new Error('Erro na rede: ' + response.status);
+        //     }
+        //     return response.json(); 
+        // })
+        // .then(data => {
+        //     console.log(data); 
+        // })
+        // fetch("https://restcountries.com/v3.1/all?fields=name")
+        // .then(response => {
+        //     if (!response.ok) {
+        //     throw new Error('Erro na rede: ' + response.status);
+        //     }
+        //     return response.json(); 
+        // })
+        // .then(data => {
+        //     console.log(data); 
+        // })
+        const viagem = {
+            paisPort: "",
+            paisIng: "",
+        }
+        // const inputPais = document.querySelector("#pais")
+        const inputCidade = document.querySelector("#cidade")    
+
+        // inputPais.addEventListener("input", async()=>{
+        //     const resp = await fetch(`https://restcountries.com/v3.1/name/${inputPais.value}`)
+        //     if(resp.ok){
+        //         const dados = await resp.json()
+        //         mostrarPaises(dados) 
+        //     }
+        // })
+
+        // const mostrarPaises = (array)=>{
+        //     const sugestPais = document.querySelector("#sugest-pais")
+        //     sugestPais.innerHTML = ''
+
+        //     array.forEach(pais => {
+        //         const displayNames = new Intl.DisplayNames(['pt-BR'], { type: 'region' })
+        //         // console.log(pais["name"]["common"])
+        //         // viagem.paisPort = displayNames.of(pais["cca2"])
+        //         // viagem.paisIng = pais["name"]["common"]
+
+        //         console.log(displayNames.of(pais["cca2"]))
+                
+        //         const div = document.createElement('div')
+        //         div.innerHTML = displayNames.of(pais["cca2"])
+        //         div.classList.add("item-sugest")
+
+        //         div.addEventListener("click", ()=>{
+        //             inputPais.value = displayNames.of(pais["cca2"])
+        //             sugestPais.innerHTML = ''
+        //             inputCidade.removeAttribute("readonly")
+        //         })
+
+        //         sugestPais.append(div)
+        //         // console.log(pais)
+        //     })
+        // }
+
+        inputCidade.addEventListener("input", async()=>{
+            const resp = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${inputCidade.value}&apiKey=803e071045c64d13a3dbb8c9058c323a`, {
+                method: 'GET',
+            })
+            if(resp.ok){
+                const dados = await resp.json()
+                console.log(dados['features'])
+                mostrarCidades(dados['features']) 
+            }
+        })
+
+        const mostrarCidades = (array)=>{
+            const sugestCidades = document.querySelector("#sugest-cidade")
+            sugestCidades.innerHTML = ''
+
+            array.forEach(cidade => {
+                const displayNames = new Intl.DisplayNames(['pt-BR'], { type: 'region' })
+                console.log(displayNames.of(cidade['properties']['country_code']))
+                console.log(cidade['properties']['city'])
+                console.log(cidade['properties']['country'])
+                
+                const div = document.createElement('div')
+                div.innerHTML = `${cidade['properties']['city']} - ${displayNames.of(cidade['properties']['country_code'].toUpperCase())}`
+                div.classList.add("item-sugest")
+
+                div.addEventListener("click", ()=>{
+                    inputCidade.value = cidade['properties']['city'] 
+                    sugestCidades.innerHTML = ''
+                })
+
+                sugestCidades.append(div)
+            })
+        }
+
+        document.addEventListener("click", (e)=>{
+            if(!e.target.closest("#pais")){
+                const sugestPais = document.querySelector("#sugest-pais")
+                // inputCidade.removeAttribute("readonly")
+                sugestPais.innerHTML = ''
+            }else if(!e.target.closest("#cidade")){
+                const sugestCidades = document.querySelector("#sugest-cidade")
+                sugestCidades.innerHTML = ''
+            }
+        })
+    </script>
 </body>
 </html>
