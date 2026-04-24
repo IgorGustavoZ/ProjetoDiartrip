@@ -5,201 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Diartrip</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box}
-body{
-margin:0;
-font-family:'Inter',sans-serif;
-background:#0b1220;
-color:white;
-}
-
-.app{
-display:grid;
-grid-template-columns:280px 1fr;
-min-height:100vh;
-}
-
-/* SIDEBAR */
-.sidebar{
-background:#0f172a;
-padding:30px 20px;
-border-right:1px solid rgba(255,255,255,0.08);
-}
-
-.logo{
-font-size:22px;
-font-weight:700;
-margin-bottom:40px;
-}
-
-.menu-item{
-padding:12px 14px;
-border-radius:10px;
-margin-bottom:8px;
-color:#cbd5f5;
-cursor:pointer;
-transition:0.2s;
-}
-
-.menu-item:hover{
-background:rgba(255,255,255,0.08);
-color:white;
-}
-
-.new-trip{
-margin-top:25px;
-padding:12px;
-border:none;
-border-radius:10px;
-width:100%;
-background:linear-gradient(90deg,#3b82f6,#06b6d4);
-color:white;
-cursor:pointer;
-}
-
-/* MAIN */
-.main{
-padding:30px;
-display:flex;
-flex-direction:column;
-}
-
-.header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:25px;
-}
-
-.user{
-background:rgba(255,255,255,0.08);
-padding:8px 14px;
-border-radius:20px;
-}
-
-.content{
-display:grid;
-grid-template-columns:1fr 380px;
-gap:25px;
-flex:1;
-}
-
-/* TRIPS */
-.trips{
-background:rgba(255,255,255,0.05);
-border-radius:16px;
-padding:25px;
-border:1px solid rgba(255,255,255,0.08);
-}
-
-.trip-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:18px;
-margin-top:20px;
-}
-
-.trip-card{
-background:rgba(255,255,255,0.06);
-padding:18px;
-border-radius:12px;
-cursor:pointer;
-transition:0.25s;
-}
-
-.trip-card:hover{
-transform:translateY(-4px);
-background:rgba(255,255,255,0.1);
-}
-
-.trip-date{
-font-size:13px;
-color:#94a3b8;
-}
-
-/* CHAT */
-.chat{
-background:rgba(255,255,255,0.05);
-border-radius:16px;
-border:1px solid rgba(255,255,255,0.08);
-display:flex;
-flex-direction:column;
-}
-
-.chat-header{
-padding:16px 20px;
-border-bottom:1px solid rgba(255,255,255,0.08);
-font-weight:600;
-}
-
-.chat-messages{
-flex:1;
-padding:20px;
-overflow-y:auto;
-font-size:14px;
-color:#cbd5f5;
-}
-
-.message{
-margin-bottom:14px;
-}
-
-.chat-input{
-display:flex;
-padding:14px;
-border-top:1px solid rgba(255,255,255,0.08);
-gap:10px;
-}
-
-.chat-input input{
-flex:1;
-padding:10px 12px;
-border-radius:8px;
-border:none;
-background:rgba(255,255,255,0.08);
-color:white;
-}
-
-.chat-input button{
-padding:10px 16px;
-border:none;
-border-radius:8px;
-background:linear-gradient(90deg,#3b82f6,#06b6d4);
-color:white;
-cursor:pointer;
-}
-
-@media(max-width:900px){
-.app{
-grid-template-columns:1fr;
-}
-
-.sidebar{
-display:none;
-}
-
-.content{
-grid-template-columns:1fr;
-}
-}
-
-</style>
+<link rel="stylesheet" href="static/style.css">
 </head>
 <body>
-
     <div class="app">
 
     <div class="sidebar">
 
-    <div class="logo">Diartrip</div>
+    <a href="#">
+        <div class="logo">Diartrip</div>
+    </a>
 
-    <div class="menu-item">🏠 Dashboard</div>
     <div class="menu-item">✈ Minhas viagens</div>
     <div class="menu-item">💬 Chat IA</div>
-    <div class="menu-item">⚙ Configurações</div>
+    <a href="lobby-pags/config.html">
+        <div class="menu-item">⚙ Configurações</div>
+    </a>
 
-    <button class="new-trip">+ Nova viagem</button>
+    <a href="lobby-pags/form-viagem.html">
+        <button class="new-trip">+ Nova viagem</button>
+    </a>
 
     </div>
 
@@ -207,7 +32,7 @@ grid-template-columns:1fr;
 
     <div class="header">
     <h2>Minhas viagens</h2>
-    <div class="user">Olá, viajante</div>
+    <div class="user"></div>
     </div>
 
     <div class="content">
@@ -217,7 +42,7 @@ grid-template-columns:1fr;
 
     <div class="trip-grid">
 
-    <div class="trip-card">
+    <!-- <div class="trip-card">
     <strong>Roma</strong>
     <div class="trip-date">12 Jul - 18 Jul</div>
     </div>
@@ -230,7 +55,7 @@ grid-template-columns:1fr;
     <div class="trip-card">
     <strong>Santiago</strong>
     <div class="trip-date">05 Set - 12 Set</div>
-    </div>
+    </div> -->
 
     </div>
 
@@ -258,6 +83,28 @@ grid-template-columns:1fr;
     </div>
 
 <script>
+    const txtBv = async ()=>{
+        const respGetUsuario = await fetch(`http://127.0.0.1:8000/usuarios/${sessionStorage.getItem("id")}`, {
+            method: 'GET', 
+            headers: {
+                'Authorization': `Bearer ${sessionStorage.getItem("token")}`,
+                'Content-Type': 'application/json'
+            }
+        })
+
+        if(respGetUsuario.ok){
+            const dados = await respGetUsuario.text()
+           
+            const respJson = JSON.parse(dados)
+
+            document.querySelector(".user").innerHTML = `Olá, ${respJson.nome}!`
+
+        } 
+    }
+
+    txtBv()
+
+
     function sendMessage(){
 
     const input = document.getElementById('chatInput')
