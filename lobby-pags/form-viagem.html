@@ -84,103 +84,117 @@
             </div>       
     </div>
 
-    <script>
-        // var requestOptions = {
-        // method: 'GET',
-        // };
+<script>
+    // fetch(`https://api.openweathermap.org/data/2.5/forecast?q=Limeira&appid=82c889fafda006a44acac820fd8a2791&units=metric&lang=pt_br`)
+    // .then(resp => resp.json())
+    // .then(dados => {
+    //     console.log(dados)
+    // })
 
-        // fetch("https://api.geoapify.com/v1/geocode/autocomplete?text=Mosco&apiKey=803e071045c64d13a3dbb8c9058c323a", requestOptions)
-        // .then(response => response.json())
-        // .then(result => console.log(result))
-        // .catch(error => console.log('error', error))
+    // pode ser usado o amadeus ainda
+    // fetch("https://nominatim.openstreetmap.org/search?q=restaurants in London&format=json&addressdetails=1")
+    // .then(resp => resp.json())
+    // .then(dados=>console.log(dados))
 
-        // fetch(`https://api.openweathermap.org/data/2.5/weather?q=Limeira,BR&appid=82c889fafda006a44acac820fd8a2791`)
-        // .then(response => {
-        //     if (!response.ok) {
-        //     throw new Error('Erro na rede: ' + response.status);
-        //     }
-        //     return response.json(); 
-        // })
-        // .then(data => {
-        //     console.log(data); 
-        // })
-        // fetch("https://restcountries.com/v3.1/all?fields=name")
-        // .then(response => {
-        //     if (!response.ok) {
-        //     throw new Error('Erro na rede: ' + response.status);
-        //     }
-        //     return response.json(); 
-        // })
-        // .then(data => {
-        //     console.log(data); 
-        // })
-        const viagem = {
-            paisIng: "",
-            cidade: ""
-        }
+    const viagem = {
+        paisIng: "",
+        cidade: ""
+    }
 
-        // const inputPais = document.querySelector("#pais")
-        const inputCidade = document.querySelector("#cidade")    
-        const inputDataInicio = document.querySelector("#inicio") 
-        const inputDataFim = document.querySelector("#fim") 
-        const orcamento = document.querySelector("#orcamento")
-        const tipoViagem = document.querySelector("#tipo") 
-        const prefs = document.querySelector("#preferencias") 
+    // const inputPais = document.querySelector("#pais")
+    const inputCidade = document.querySelector("#cidade")    
+    const inputDataInicio = document.querySelector("#inicio") 
+    const inputDataFim = document.querySelector("#fim") 
+    const orcamento = document.querySelector("#orcamento")
+    const tipoViagem = document.querySelector("#tipo") 
+    const prefs = document.querySelector("#preferencias") 
 
-        document.addEventListener("click", (e)=>{           
-            if(!e.target.closest("#cidade")){
-                const sugestCidades = document.querySelector("#sugest-cidade")
-                sugestCidades.innerHTML = ''
-            }
-        })
-
-        inputCidade.addEventListener("input", async()=>{
-            const resp = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${inputCidade.value}&apiKey=803e071045c64d13a3dbb8c9058c323a`, {
-                method: 'GET',
-            })
-            if(resp.ok){
-                const dados = await resp.json()
-                // console.log(dados['features'])
-                mostrarCidades(dados['features']) 
-            }
-        })
-
-        const mostrarCidades = (array)=>{
+    document.addEventListener("click", (e)=>{           
+        if(!e.target.closest("#cidade")){
             const sugestCidades = document.querySelector("#sugest-cidade")
             sugestCidades.innerHTML = ''
-
-            array.forEach(cidade => {
-                const displayNames = new Intl.DisplayNames(['pt-BR'], { type: 'region' })
-                // console.log(displayNames.of(cidade['properties']['country_code']))
-                // console.log(cidade['properties']['city'])
-                // console.log(cidade['properties']['country'])
-                
-                const div = document.createElement('div')
-                div.innerHTML = `${cidade['properties']['city']} - ${displayNames.of(cidade['properties']['country_code'].toUpperCase())}`
-                // div.setAttribute("data-pais",cidade['properties']['country'])
-                div.classList.add("item-sugest")
-
-                div.addEventListener("click", ()=>{
-                    inputCidade.value = cidade['properties']['city']
-
-                    viagem.paisIng = cidade['properties']['country']
-                    viagem.cidade = cidade['properties']['city']
-                    console.log(viagem)
-                    sugestCidades.innerHTML = ''
-                })
-
-                sugestCidades.append(div)
-            })
         }
+    })
 
-       document.querySelector("button[type='submit']").addEventListener('click', ()=>{
+    inputCidade.addEventListener("input", ()=>{
+        setTimeout(async ()=>{
+            const resp = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${inputCidade.value}&apiKey=803e071045c64d13a3dbb8c9058c323a&lang=pt`, {
+                method: 'GET',
+            })
+            if(!resp.ok){
+                console.log("Erro na requisição autocomplete: "+resp)
+                return
+            }
+            const dados = await resp.json()
+            
+            mostrarCidades(dados['features']) 
+        },300)
+        
+    })
+
+    const mostrarCidades = (array)=>{
+        const sugestCidades = document.querySelector("#sugest-cidade")
+        sugestCidades.innerHTML = ''
+
+        array.forEach(item => {
+            const props = item.properties;
+
+            const cidade =
+            props.city ||
+            props.town ||
+            props.village ||
+            props.name ||
+            "Desconhecido"
+
+            const estado = props.state || ""
+            const pais = props.country || ""
+
+            const div = document.createElement('div')
+            div.innerHTML = props.formatted
+            div.classList.add("item-sugest")
+
+            div.addEventListener("click", ()=>{
+                if(cidade == "Desconhecido"){
+                    console.log("Erro: cidade desconhecida.")
+                
+                    inputCidade.value = props.formatted.split(",")[0]
+                    return
+                } 
+
+                inputCidade.value = cidade
+                
+                viagem.cidade = cidade
+                viagem.paisIng = pais
+
+                sugestCidades.innerHTML = ''
+            })
+
+            sugestCidades.append(div)
+           
+        })
+
+    }
+
+    document.querySelector("button[type='submit']").addEventListener('click', ()=>{
+        const dataInc = inputDataInicio.value.split("-")
+        const dataFim = inputDataFim.value.split("-")
+        console.log(dataInc)
+        console.log(dataFim)
+        if((dataInc[2] >= dataFim[2] && dataInc[1] == dataFim[1]) || dataInc[0] > dataFim[0] || dataInc[1] > dataFim[1]) console.log("Data inválida.")
+        else {
             console.log("Cidade: "+inputCidade.value)
             console.log("Data de início: "+inputDataInicio.value)
             console.log("Data final: "+inputDataFim.value)
             console.log("Orçamento: "+orcamento.value)
             console.log("Tipo de viagem: "+tipoViagem.value)
             console.log("Preferências: "+prefs.value)
-       })
-    </script>
+
+            fetch(`https://nominatim.openstreetmap.org/search?q=restaurants in ${inputCidade.value}&format=json&addressdetails=1`)
+            .then(resp => resp.json())
+            .then(dados=>console.log(dados))
+        }
+        
+    })
+</script>
 </body>
 </html>
