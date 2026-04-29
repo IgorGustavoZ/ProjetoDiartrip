@@ -35,26 +35,26 @@
             <h2>Planejar Viagem ✈️</h2>
 
             <div class="field">
-            <label>Cidade</label>
-            <input id="cidade" placeholder="Ex: Paris" required>
-            <div class="sugestoes" id="sugest-cidade">
-                
-            </div>
+                <label for="cidade">Cidade</label>
+                <input id="cidade" placeholder="Ex: Paris" required>
+                <div class="sugestoes" id="sugest-cidade">
+                    
+                </div>
             </div>
 
             <div class="field" style="flex:1">
-                <label>Data de início</label>
+                <label for="inicio">Data de início</label>
                 <input id="inicio" type="date" required>
             </div>
 
             <div class="field" style="flex:1">
-                <label>Data de fim</label>
+                <label for="fim">Data de fim</label>
                 <input id="fim" type="date" required>
             </div>
             
 
             <div class="field">
-                <label>Orçamento</label>
+                <label for="orcamento">Orçamento</label>
                 <select id="orcamento">
                 <option value="economico">Econômico</option>
                 <option value="medio">Médio</option>
@@ -63,7 +63,7 @@
             </div>
 
             <div class="field">
-                <label>Tipo de viagem</label>
+                <label for="tipo">Tipo de viagem</label>
                 <select id="tipo">
                 <option value="gastronomico">Gastronômico</option>
                 <option value="aventura">Aventura</option>
@@ -72,11 +72,16 @@
                 </select>
             </div>
 
-            <div class="field" style="margin-bottom: 36px;">
-                <label>Preferências</label>
+            <div class="field">
+                <label for="preferencias">Preferências</label>
                 <input id="preferencias" placeholder="Ex: museus, restaurantes...">
             </div>
-
+            <div class="error" style="margin-bottom: 20px;">
+                
+            </div>
+            <div class="sucess">
+                
+            </div>
             <button type="submit">Gerar Roteiro</button>
 
             <div id="result" class="result" style="display: none;">Roteiro sendo gerado...</div>
@@ -108,10 +113,17 @@
     const orcamento = document.querySelector("#orcamento")
     const tipoViagem = document.querySelector("#tipo") 
     const prefs = document.querySelector("#preferencias") 
+    
+    const divError = document.querySelector(".error")
+    const divSucess = document.querySelector(".sucess")
 
     document.addEventListener("click", (e)=>{           
         if(!e.target.closest("#cidade")){
             const sugestCidades = document.querySelector("#sugest-cidade")
+
+            const cidades = [...sugestCidades.childNodes]
+            if(cidades.length > 0) cidades[0].click()
+
             sugestCidades.innerHTML = ''
         }
     })
@@ -144,32 +156,34 @@
             props.town ||
             props.village ||
             props.name ||
-            "Desconhecido"
+            ""
 
             const estado = props.state || ""
             const pais = props.country || ""
+            if(cidade != ""){
+                const div = document.createElement('div')
+                div.innerHTML = props.formatted
+                div.classList.add("item-sugest")
 
-            const div = document.createElement('div')
-            div.innerHTML = props.formatted
-            div.classList.add("item-sugest")
-
-            div.addEventListener("click", ()=>{
-                if(cidade == "Desconhecido"){
-                    console.log("Erro: cidade desconhecida.")
+                div.addEventListener("click", ()=>{
+                if(cidade == ""){
+                    // console.log("Erro: cidade desconhecida.")
                 
-                    inputCidade.value = props.formatted.split(",")[0]
+                    // inputCidade.value = props.formatted.split(",")[0]
                     return
                 } 
 
-                inputCidade.value = cidade
-                
-                viagem.cidade = cidade
-                viagem.paisIng = pais
+                    inputCidade.value = props.formatted
+                    
+                    viagem.cidade = cidade
+                    viagem.paisIng = pais
 
-                sugestCidades.innerHTML = ''
-            })
+                    sugestCidades.innerHTML = ''
+                })
 
-            sugestCidades.append(div)
+                sugestCidades.append(div)
+            }           
+            
            
         })
 
@@ -178,10 +192,30 @@
     document.querySelector("button[type='submit']").addEventListener('click', ()=>{
         const dataInc = inputDataInicio.value.split("-")
         const dataFim = inputDataFim.value.split("-")
-        console.log(dataInc)
-        console.log(dataFim)
-        if((dataInc[2] >= dataFim[2] && dataInc[1] == dataFim[1]) || dataInc[0] > dataFim[0] || dataInc[1] > dataFim[1]) console.log("Data inválida.")
+
+        console.log(dataInc) // data de início
+        console.log(dataFim) // data de fim
+
+        const anoAtual = new Date().getFullYear() // pega o ano atual.
+        const diaAtual = new Date().getDate()
+        const mesAtual = new Date().getMonth() + 1
+
+        console.log(diaAtual)
+
+        divError.innerHTML = ""
+        divSucess.innerHTML = ""
+
+        // data[2] - dias
+        // data[1] - meses
+        // data[0] - ano
+
+        if((dataInc[2] >= dataFim[2] && dataInc[1] == dataFim[1]) || dataInc[0] > dataFim[0] || dataInc[1] > dataFim[1] || (dataInc[0] < anoAtual || dataFim[0] < anoAtual) || (dataInc[2] < diaAtual && dataInc[1] == mesAtual) || (dataFim[2] < diaAtual && dataFim[1] == mesAtual)){
+            divError.innerHTML = "Informações inválidas"
+            console.log("Data inválida.")
+        } 
         else {
+            divSucess.innerHTML = "Viagem criada com sucesso!"
+
             console.log("Cidade: "+inputCidade.value)
             console.log("Data de início: "+inputDataInicio.value)
             console.log("Data final: "+inputDataFim.value)
