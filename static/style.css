@@ -1,28 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+:root{
+    --fundo: #111933;
+    --fundo2: #171e38;
+    /* --fundo: #3f7f9c;
+    --fundo2: #2f5f75; */
+}
+
 *{
     box-sizing:border-box
 }
 body{
     margin:0;
     font-family: "Mulish", sans-serif;
-    background:#0b1220;
-    color:white;
+    /* background-image: linear-gradient(var(--fundo), var(--fundo2) 30%); */
+    background-color: var(--fundo);
+    color:#e4e4e4;
 }
 
 header{
+    z-index: 999;
     display:flex;
     justify-content:space-between;
     align-items:center;
     padding:20px 60px;
     position:sticky;
     top:0;
-    background:rgba(11,18,32,0.7);
-    backdrop-filter:blur(10px);
+    background:#2b396d00;
+    /* background-color: var(--fundo); 2b396d93 */
+    /* background-image: linear-gradient(#020202, #171e38 80%, #2b396d , #e4e4e4); */
+    /* backdrop-filter:blur(10px); */
 }
 
-.logo{
-    
+.logo{   
     margin: 0px !important;
 }
 
@@ -69,7 +80,7 @@ nav a:hover{
 
     /* background:radial-gradient(circle at top,#2563eb,transparent 60%), #0b1220; */
 
-    background-image: url("../imagens/pexels-ketut-subiyanto-4907611.jpg");
+    background-image: url("../imagens/aviao3\ \(1\).jpg");
     background-size: cover;
     background-attachment: fixed;
     filter: brightness(90%);
@@ -100,8 +111,9 @@ nav a:hover{
     font-size:18px;
     border-radius:10px;
     border:none;
-    background:linear-gradient(90deg,#3b82f6,#06b6d4);
-    color:white;
+    background:linear-gradient(#f79748, #fff05a);
+    /* background-color: #f79748; */
+    color:black;
     cursor:pointer;
     box-shadow:0 10px 30px rgba(0, 0, 0, 0.63);
     transition: .5s ease;
@@ -117,6 +129,7 @@ nav a:hover{
 
 .features{
     max-width:1200px;
+    
     margin:auto;
     padding:100px 20px;
 }
@@ -137,7 +150,7 @@ nav a:hover{
     background:rgba(255,255,255,0.05);
     padding:30px;
     border-radius:16px;
-    backdrop-filter:blur(6px);
+    /* backdrop-filter:blur(6px); */
     border:1px solid rgba(255,255,255,0.08);
     transition:0.3s;
 }
@@ -161,7 +174,7 @@ nav a:hover{
 }
 
 .how{
-    background:#0f172a;
+    background: var(--fundo2);
     text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.8);
 
     padding:100px 20px;
@@ -205,7 +218,7 @@ nav a:hover{
 .cta-section{
     text-align:center;
     padding:120px 20px;
-    background:#0f172a;
+    background:var(--fundo2);
 }
 
 .cta-section h2{
