@@ -40,7 +40,6 @@
                 </div>
             </div>
 
-
             <section style="padding:100px 20px; max-width:1200px; margin:auto; position: relative; bottom: 70px;display:flex; flex-direction:column; gap:15px; display: none;" id="alterarConta">
                     <div class="back">
                         <span class="material-symbols-outlined">
@@ -49,8 +48,6 @@
                     </div>
 
                     <h2>Alterar informações da conta</h2>
-
-                    
 
                     <div class="field">
                         <label for="nome">Novo nome</label>
@@ -67,18 +64,13 @@
                         <input id="senha" type="password" placeholder="Sua senha" required>
                         <span class="togglePassword" style="font-size:14px; color:#94a3b8;cursor: pointer; top: 45px; right: 10px; text-align: right; position: absolute;display: inline-block;">mostrar</span>
                     </div>
-                    <div class="error" style="display: none;">
-                        
-                    </div>
-                    <div class="sucess" style="display: none;">
-                        
-                    </div>
+                    <div class="error" style="display: none;"></div>
+                    <div class="sucess" style="display: none;"></div>
                 
                     <div class="actions" style="margin: 20px; display: flex; justify-content: space-between;">
                         <button class="save" type="submit">Salvar alterações</button>
                         <button class="delete">Excluir conta</button>
                     </div>
-                
             </section>
         </div>
     </div>
@@ -95,8 +87,6 @@
         const msgSucess = document.querySelector(".sucess")
         const msgError = document.querySelector(".error")
 
-        const form = document.querySelector("form")
-
         const btnAlterarConta = document.querySelector("#btnAlterarConta")
         const divAlterarConta = document.querySelector("#alterarConta")
 
@@ -105,12 +95,9 @@
                 btnAlterarConta.parentElement.style.display="block"
                 divAlterarConta.style.display="none"
             })
-        
             btnAlterarConta.parentElement.style.display="none"
             divAlterarConta.style.display="flex"
         })
-
-        
 
         const colocarDados = async ()=>{
            const respGetUsuario = await fetch(`http://127.0.0.1:8000/usuarios/${sessionStorage.getItem("id")}`, {
@@ -120,13 +107,9 @@
                     'Content-Type': 'application/json'
                 }
            })
-
             if(respGetUsuario.ok){
                 const dados = await respGetUsuario.text()
-                console.log("Dados: "+dados)
-
                 const respJson = JSON.parse(dados)
-
                 nomeInput.value = respJson.nome
                 emailInput.value = respJson.email
             } 
@@ -135,71 +118,35 @@
         colocarDados()
 
         btnSave.addEventListener("click", async ()=>{
-<<<<<<< HEAD
-    if(passwordInput.value.length >= 6){
-        const respPutUsuario = await fetch(`http://127.0.0.1:8000/usuarios/${sessionStorage.getItem("id")}`, {
-            method: 'PUT', 
-            headers: {
-                'Authorization': `Bearer ${sessionStorage.getItem("token")}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                nome: nomeInput.value,
-                email: emailInput.value
-            })
-        })
-
-        if(respPutUsuario.ok){
-            esconderAvisos()
-            msgSucess.style.display = "block"
-            msgSucess.innerHTML = "Usuário atualizado com sucesso!"
-            limparCampos()
-            colocarDados()
-        } else {
-            esconderAvisos()
-            msgError.style.display = "block"
-            msgError.innerHTML = "Aconteceu algum erro ao atualizar o usuário. Tente novamente."
-        } 
-    } else {
-        esconderAvisos()
-        msgError.style.display = "block"
-        msgError.innerHTML = "A senha deve ter no mínimo 6 caracteres."
-    } 
-})
-=======
-            if(passwordInput.value >= 6){
-                const respPutUsuario = await fetch(`http://127.0.0.1:8000/usuarios/${sessionStorage.getItem("id")}?nome=${nomeInput.value}&email=${emailInput.value}&senha=${passwordInput.value}`, {
-                method: 'PUT', 
-                headers: {
-                    'Authorization': `Bearer ${sessionStorage.getItem("token")}`,
-                    'Content-Type': 'application/json'
-                }
+            if(passwordInput.value.length >= 6){
+                const respPutUsuario = await fetch(`http://127.0.0.1:8000/usuarios/${sessionStorage.getItem("id")}`, {
+                    method: 'PUT', 
+                    headers: {
+                        'Authorization': `Bearer ${sessionStorage.getItem("token")}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        nome: nomeInput.value,
+                        email: emailInput.value
+                    })
                 })
-
                 if(respPutUsuario.ok){
                     esconderAvisos()
-
                     msgSucess.style.display = "block"
                     msgSucess.innerHTML = "Usuário atualizado com sucesso!"
-
                     limparCampos()
                     colocarDados()
-                }
-                else{
+                } else {
                     esconderAvisos()
-
                     msgError.style.display = "block"
                     msgError.innerHTML = "Aconteceu algum erro ao atualizar o usuário. Tente novamente."
                 } 
-            }else{
+            } else {
                 esconderAvisos()
-
                 msgError.style.display = "block"
-                msgError.innerHTML = "Aconteceu algum erro ao atualizar o usuário. Verifique as informações."
+                msgError.innerHTML = "A senha deve ter no mínimo 6 caracteres."
             } 
-            
         })
->>>>>>> f9150286333db347bedea43552b64ba3b169b168
 
         btnDelete.addEventListener("click", async ()=>{
             const respDeleteUsuario = await fetch(`http://127.0.0.1:8000/usuarios/${sessionStorage.getItem("id")}`, {
@@ -209,19 +156,13 @@
                     'Content-Type': 'application/json'
                 }
             })
-
             if(respDeleteUsuario.ok){
                 esconderAvisos()
-
                 msgSucess.style.display = "block"
                 msgSucess.innerHTML = "Usuário deletado com sucesso!"
-                setTimeout(()=>{
-                    window.location.href = "../index.html"
-                },2000)
-            }
-            else{
+                setTimeout(()=>{ window.location.href = "../index.html" }, 2000)
+            } else {
                 esconderAvisos()
-
                 msgError.style.display = "block"
                 msgError.innerHTML = "Aconteceu algum erro ao deletar o usuário. Tente novamente."
             } 
@@ -242,13 +183,11 @@
             if(passwordInput.type === "password"){
                 passwordInput.type = "text"
                 togglePassword.textContent = "ocultar"
-            }else{
+            } else {
                 passwordInput.type = "password"
                 togglePassword.textContent = "mostrar"
             } 
         })
-
-
     </script>
 </body>
 </html>
