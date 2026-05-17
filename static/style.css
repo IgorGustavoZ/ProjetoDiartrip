@@ -77,12 +77,8 @@ nav a:hover{
 .hero{
     padding:120px 20px;
     text-align:center;
-
-    /* background:radial-gradient(circle at top,#2563eb,transparent 60%), #0b1220; */
-
-    background-image: url("../imagens/aviao3\ \(1\).jpg");
+    background-image: url("../imagens/hero.jpg");
     background-size: cover;
-    background-attachment: fixed;
     filter: brightness(90%);
 }
 
