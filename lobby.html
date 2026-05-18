@@ -13,57 +13,93 @@
     <div class="app">
 
     <div class="sidebar">
+        <a href="#">
+            <div class="logo"><img src="imagens/logo-diartrip.png" alt=""></div>
+        </a>
 
-    <a href="#">
-        <div class="logo"><img src="imagens/logo-diartrip.png" alt=""></div>
-    </a>
+        <div class="menu-item">✈ Minhas viagens</div>
+        <div class="menu-item">💬 Comunidades</div>
+        <a href="lobby-pags/config.html">
+            <div class="menu-item">⚙ Configurações</div>
+        </a>
 
-    <div class="menu-item">✈ Minhas viagens</div>
-    <div class="menu-item">💬 Chat IA</div>
-    <a href="lobby-pags/config.html">
-        <div class="menu-item">⚙ Configurações</div>
-    </a>
-
-    <a href="lobby-pags/form-viagem.html">
-        <button class="new-trip">+ Nova viagem</button>
-    </a>
-
+        <a href="lobby-pags/form-viagem.html">
+            <button class="new-trip">+ Nova viagem</button>
+        </a>
     </div>
 
     <div class="main">
 
-    <div class="header">
-    <h2>Minhas viagens</h2>
-    <div class="user"></div>
-    </div>
+        <div class="header">
+        <h2>Minhas viagens</h2>
+        <div class="user"></div>
+        </div>
 
-    <div class="content">
+        <div class="content">
+            <div class="trips">
+            <h3>Suas viagens</h3>
 
-    <div class="trips">
-    <h3>Suas viagens</h3>
+            <div class="trip-grid">
 
-    <div class="trip-grid">
-    </div>
+            </div>
 
-    </div>
+            </div>
 
-    <div class="chat">
+            <div class="modal" id="editModal">
 
-    <div class="chat-header">Assistente de Viagem IA</div>
+                <div class="modal-content">
 
-    <div id="chatMessages" class="chat-messages">
-    <div class="message"><strong>IA:</strong> Olá! Selecione uma viagem e pode me perguntar o que quiser sobre ela.</div>
-    </div>
+                    <h2>Editar viagem</h2>
 
-    <div class="chat-input">
-    <input id="chatInput" placeholder="Pergunte algo sobre sua viagem...">
-    <button onclick="sendMessage()">Enviar</button>
-    </div>
+                    <input id="editNome" placeholder="Nome da viagem">
+                    <!-- <input id="editDestino" placeholder="Destino"> -->
+                    <input id="editInicio" type="date">
+                    <input id="editFim" type="date">
 
-    </div>
+                    <div class="error">
+                        
+                    </div>
 
-    </div>
+                    <div class="modal-buttons">
+                        <button class="btn salvar" onclick="salvarEdicao()">Salvar</button>
+                        <button class="btn cancelar" onclick="fecharModalEdit()">Cancelar</button>
+                    </div>
 
+                </div>
+
+            </div>
+
+            <div class="modal" id="excludeModal">
+
+                <div class="modal-content">
+                    <h2>Tem certeza que deseja excluir viagem?</h2>                   
+
+                    <div class="error">
+                        
+                    </div>
+
+                    <div class="modal-buttons">
+                        <button class="btn salvar" onclick="excluirViagem()">Excluir</button>
+                        <button class="btn cancelar" onclick="fecharModalExclude()">Cancelar</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="chat">
+                <div class="chat-header">Assistente de Viagem IA</div>
+
+                <div id="chatMessages" class="chat-messages">
+                <div class="message"><strong>IA:</strong> Olá! Selecione uma viagem e pode me perguntar o que quiser sobre ela.</div>
+                </div>
+
+                <div class="chat-input">
+                <input id="chatInput" placeholder="Pergunte algo sobre sua viagem...">
+                <button onclick="sendMessage()">Enviar</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     </div>
@@ -107,25 +143,170 @@
         }
 
         viagens.forEach(viagem => {
-            const card = document.createElement("div")
-            card.className = "trip-card"
-            card.dataset.id = viagem.id_grupo
+            const card = document.createElement('div')
+            card.className = 'trip-card'
+            
             card.innerHTML = `
-                <strong>${viagem.nome_grupo}</strong>
-                <div class="trip-date">${viagem.destino_principal || ""}</div>
-                <div class="trip-date">${viagem.data_inicio || ""} — ${viagem.data_fim || ""}</div>
-            `
-            card.addEventListener("click", () => {
-                document.querySelectorAll(".trip-card").forEach(c => c.classList.remove("ativo"))
-                card.classList.add("ativo")
-                grupoSelecionado = viagem.id_grupo
+                <h2>${viagem.nome_grupo}</h2>
 
-                const messages = document.getElementById("chatMessages")
-                messages.innerHTML = `<div class="message"><strong>IA:</strong> Viagem <em>${viagem.nome_grupo}</em> selecionada! Como posso ajudar?</div>`
+                <div class="trip-destino">
+                    📍 ${viagem.destino_principal}
+                </div>
+
+                <div class="trip-data">
+                    ${viagem.data_inicio || "--"} até ${viagem.data_fim || "--"}
+                </div>
+
+                <div class="trip-actions">
+                    <button class="btn btn-edit">
+                        Editar
+                    </button>
+
+                    <button class="btn btn-delete">
+                        Excluir
+                    </button>
+                </div>
+            `
+
+            card.addEventListener('click', ()=>{
+
+            document.querySelectorAll('.trip-card').forEach(c=>{
+                c.classList.remove('ativo')
             })
 
-            grid.appendChild(card)
+            card.classList.add('ativo')
+
+            grupoSelecionado = viagem.id_grupo
+            
+            document.getElementById('chatMessages').innerHTML = `
+                <div class="message">
+                    <strong>IA:</strong>
+                    Viagem: "${viagem.nome_grupo}" selecionada.
+                </div>
+            `
         })
+
+        card.querySelector('.btn-edit').addEventListener('click',(e)=>{           
+            abrirModalEdit(viagem)
+        })
+
+        card.querySelector('.btn-delete').addEventListener('click',(e)=>{           
+            abrirModalExclude()
+        })
+
+        grid.appendChild(card)
+        })
+    }
+
+    function abrirModalEdit(viagem){
+        viagemEditando = viagem
+
+        document.getElementById('editNome').value = viagem.nome_grupo
+        document.getElementById('editInicio').value = viagem.data_inicio
+        document.getElementById('editFim').value = viagem.data_fim
+
+        document.getElementById('editModal').style.display = 'flex'
+    }
+
+    function fecharModalEdit(){
+        document.getElementById('editModal').style.display = 'none'
+    }
+
+    function abrirModalExclude(){
+        document.getElementById('excludeModal').style.display = 'flex'
+    }
+
+    function fecharModalExclude(){
+        document.getElementById('excludeModal').style.display = 'none'
+    }
+
+    async function salvarEdicao(){
+        
+        const divError = document.querySelector(".error")
+
+        viagemEditando.nome_grupo = document.getElementById('editNome').value 
+
+        viagemEditando.data_inicio = document.getElementById('editInicio').value
+        viagemEditando.data_fim = document.getElementById('editFim').value
+
+        const dataInc = viagemEditando.data_inicio.split("-")
+        const dataFim = viagemEditando.data_fim.split("-")
+
+        const anoAtual = new Date().getFullYear()
+        const diaAtual = new Date().getDate()
+        const mesAtual = new Date().getMonth() + 1
+
+        console.log(viagemEditando.data_inicio)
+
+        if(
+            (dataInc[2] >= dataFim[2] && dataInc[1] == dataFim[1]) ||
+            dataInc[0] > dataFim[0] ||
+            dataInc[1] > dataFim[1] ||
+            (dataInc[0] < anoAtual || dataFim[0] < anoAtual) ||
+            (dataInc[2] < diaAtual && dataInc[1] == mesAtual) ||
+            (dataFim[2] < diaAtual && dataFim[1] == mesAtual)
+        ){
+            divError.innerHTML = "Informações inválidas"
+
+            console.log("Data inválida.")
+
+            return
+        }
+
+        const respDados = await fetch(`http://127.0.0.1:8000/grupos/${grupoSelecionado}`, {
+            method: "GET",
+            headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+            },
+        })
+        
+        const dadosDaViagem = await respDados.json()
+
+        
+
+        const resp = await fetch(`http://127.0.0.1:8000/grupos/${viagemEditando.id_grupo}`, {
+            method: "PUT",
+            headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+            },
+            body: JSON.stringify({
+                "nome_grupo": viagemEditando.nome_grupo,
+                "destino_principal": viagemEditando.destino_principal,
+                "data_inicio": viagemEditando.data_inicio,
+                "data_fim": viagemEditando.data_fim,
+                "orcamento": "string", // dados de exemplo*
+                "tipo_viagem": "string",
+                "preferencias": "string" // 
+            })
+        })
+
+        if(!resp.ok){
+            divError.innerHTML = "Aconteceu algum erro."
+        }
+        else{
+            fecharModalEdit()
+            carregarViagens()
+        }
+               
+    }
+
+    async function excluirViagem(){
+        const divError = [...document.querySelectorAll(".error")][1]
+        const resp = await fetch(`http://127.0.0.1:8000/grupos/${grupoSelecionado}`,{
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+            },
+        })
+        if(!resp.ok){
+            divError.innerHTML = "Aconteceu algum erro."
+            return
+        }
+        fecharModalExclude()
+        window.location.reload(false)
     }
 
     async function sendMessage() {
@@ -184,11 +365,11 @@
                 const aiMsg = document.createElement("div")
                 aiMsg.className = "message"
                 aiMsg.innerHTML = `
-    <strong>IA:</strong>
-    <div class="ia-formatada">
-        ${marked.parse(dados.resposta)}
-    </div>
-`
+                <strong>IA:</strong>
+                <div class="ia-formatada">
+                ${marked.parse(dados.resposta)}
+                </div>
+                `
                 messages.appendChild(aiMsg)
             }
         } catch (e) {
